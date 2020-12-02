@@ -10,13 +10,14 @@
 #include <math.h>
 #include "miniAES.h"
 #include "src/nibbleSub.h"
+#include "src/shiftRow.h"
 
 using namespace std;
 
 int main(){
 
     uint16_t plaintext=0x9C63;      // 16-bit plaintext block
-    nibbles_block_t p, a;
+    nibbles_block_t p, a, b, c, d;
     
 
     // Transform 16 bit block into 4 nibbles
@@ -47,9 +48,11 @@ int main(){
     cout << "\nNibble Substitute: ";
     displayNibbleBlock(a);
 
+    b = a;
     // ShiftRow
     // Rotates each row of input block left by different amounts
     // a0 a1 a2 a3  ->  a0 a3 a2 a3
+    shiftRow(b);
 
 
 

@@ -5,15 +5,11 @@ according to a 4 × 4 substitution table (S-box).
 *****************************************************************************/
 #include "nibbleSub.h"
 
-
 void nibbleSub(nibbles_block_t &A){
     A.n0 = sBox(A.n0);
     A.n1 = sBox(A.n1);
     A.n2 = sBox(A.n2);
     A.n3 = sBox(A.n3);
-    if((A.n0 || A.n1 || A.n2 || A.n3) == -1){
-        cout << "ERROR: nibbleSub" << endl;
-    }
 }
 
 
