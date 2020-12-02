@@ -1,15 +1,28 @@
 /*************************************************************************//**
-* @file dev__ride__height.h
-* @brief Ride-height sensor device layer
+* @file miniAES.h
+* @brief Mini AES configuration
 *****************************************************************************/
+
+#ifndef _MINI_AES_H
+#define _MINI_AES_H
 
 /*----------------------------------------------------------------------------
   type definitions
 ----------------------------------------------------------------------------*/
 typedef struct{
-    bool n0[4];
-    bool n1[4];
-    bool n2[4];
-    bool n3[4];
-} nibbles_t;
+    int n0;
+    int n1;
+    int n2;
+    int n3;
+}nibbles_block_t;
 
+/*----------------------------------------------------------------------------
+  prototypes
+----------------------------------------------------------------------------*/
+
+int binary2Dec(bool *binary);
+void displayNibbleBlock(nibbles_block_t nib);
+void dec2Binary(int dec, bool *binaryNum);
+
+
+#endif

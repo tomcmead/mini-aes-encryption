@@ -7,37 +7,45 @@
   include files
 ----------------------------------------------------------------------------*/
 #include <iostream>
+#include <math.h>
 #include "miniAES.h"
-using namespace std;
+#include "src/nibbleSub.h"
 
-void dec2Binary(uint16_t dec, bool *binaryNum);
-void displayBinaryBlock(nibbles_t nib);
+using namespace std;
 
 int main(){
 
-    
     uint16_t plaintext=0x9C63;      // 16-bit plaintext block
-    nibbles_t N;
-    bool binaryNum[16];
+    nibbles_block_t p, a;
+    
 
     // Transform 16 bit block into 4 nibbles
+    bool binaryNum [16];
     dec2Binary(plaintext, binaryNum);
-
+    
+    bool n0Bits[4], n1Bits[4], n2Bits[4], n3Bits[4];
     for(int i=0; i<4; i++){
-        N.n0[i] = binaryNum[i];
-        N.n1[i] = binaryNum[i+4];
-        N.n2[i] = binaryNum[i+8];
-        N.n3[i] = binaryNum[i+12];
+        n0Bits[i] = binaryNum[i];
+        n1Bits[i] = binaryNum[i+4];
+        n2Bits[i] = binaryNum[i+8];
+        n3Bits[i] = binaryNum[i+12];
     }
+    p.n0 = binary2Dec(n0Bits);
+    p.n1 = binary2Dec(n1Bits);
+    p.n2 = binary2Dec(n2Bits);
+    p.n3 = binary2Dec(n3Bits);
 
     cout << "Plaintext: ";
-    displayBinaryBlock(N);
+    displayNibbleBlock(p);
 
+    a = p;
 
     // NibbleSub
     // substitutes each nibble wiwth output nibble from S-Box look-up table
+    nibbleSub(a);
 
-
+    cout << "\nNibble Substitute: ";
+    displayNibbleBlock(a);
 
     // ShiftRow
     // Rotates each row of input block left by different amounts
@@ -61,33 +69,29 @@ int main(){
     return 0;
 }
 
-void dec2Binary(uint16_t dec, bool *binaryNum){
-
+void dec2Binary(int dec, bool *binaryNum){
     int i = 0;
     while(dec>0){
         binaryNum[i] = dec % 2;
         dec = dec / 2;
         i++;
     }
-    return;
+}
+
+int binary2Dec(bool *binary){    
+    int decimal = 0;
+    for(int i=0; i<4; i++){
+        if(binary[i]==1)
+            decimal += pow(2,i);
+    }
+    return decimal;
 }
 
 
-void displayBinaryBlock(nibbles_t nib){
-    for(int i=0; i<4; i++){
-        cout << nib.n0[i] << " ";
-    }
-    cout << " ";
-    for(int i=0; i<4; i++){
-        cout << nib.n1[i] << " ";
-    }
-    cout << " ";
-    for(int i=0; i<4; i++){
-        cout << nib.n2[i] << " ";
-    }
-    cout << " ";
-    for(int i=0; i<4; i++){
-        cout << nib.n3[i] << " ";
-    }
+void displayNibbleBlock(nibbles_block_t nib){
+    cout << hex << nib.n0 << " ";
+    cout << hex << nib.n1 << " ";
+    cout << hex << nib.n2 << " ";
+    cout << hex << nib.n3 << " ";
     cout << "\n"; 
 }
