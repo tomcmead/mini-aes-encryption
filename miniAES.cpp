@@ -54,7 +54,8 @@ int main(){
     // a0 a1 a2 a3  ->  a0 a3 a2 a3
     shiftRow(b);
 
-
+    cout << "\nShift Row: ";
+    displayNibbleBlock(b);
 
     // MixColumn
     // Takes each column of input block and multiples it with constant matrix

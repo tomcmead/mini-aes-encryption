@@ -4,6 +4,6 @@
 #include "../miniAES.h"
 
 
-void shiftRow(nibbles_block_t &A);
+void shiftRow(nibbles_block_t &B);
 
 #endif
