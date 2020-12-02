@@ -11,42 +11,27 @@
 using namespace std;
 
 void dec2Binary(uint16_t dec, bool *binaryNum);
+void displayBinaryBlock(nibbles_t nib);
 
 int main(){
 
     
     uint16_t plaintext=0x9C63;      // 16-bit plaintext block
+    nibbles_t N;
+    bool binaryNum[16];
 
     // Transform 16 bit block into 4 nibbles
-    p_nibbles P;
-    bool binaryNum[16];
     dec2Binary(plaintext, binaryNum);
-    //bool binaryNum[] = {0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1};
+
     for(int i=0; i<4; i++){
-        P.p0[i] = binaryNum[i];
-        P.p1[i] = binaryNum[i+4];
-        P.p2[i] = binaryNum[i+8];
-        P.p3[i] = binaryNum[i+12];
+        N.n0[i] = binaryNum[i];
+        N.n1[i] = binaryNum[i+4];
+        N.n2[i] = binaryNum[i+8];
+        N.n3[i] = binaryNum[i+12];
     }
 
-    cout << "Plaintext Bits:" << endl;
-    for(int i=0; i<4; i++){
-        cout << P.p0[i] << " ";
-    }
-    cout << " ";
-    for(int i=0; i<4; i++){
-        cout << P.p1[i] << " ";
-    }
-    cout << " ";
-    for(int i=0; i<4; i++){
-        cout << P.p2[i] << " ";
-    }
-    cout << " ";
-    for(int i=0; i<4; i++){
-        cout << P.p3[i] << " ";
-    }
-    cout << " "; 
-
+    cout << "Plaintext: ";
+    displayBinaryBlock(N);
 
 
     // NibbleSub
@@ -85,4 +70,24 @@ void dec2Binary(uint16_t dec, bool *binaryNum){
         i++;
     }
     return;
+}
+
+
+void displayBinaryBlock(nibbles_t nib){
+    for(int i=0; i<4; i++){
+        cout << nib.n0[i] << " ";
+    }
+    cout << " ";
+    for(int i=0; i<4; i++){
+        cout << nib.n1[i] << " ";
+    }
+    cout << " ";
+    for(int i=0; i<4; i++){
+        cout << nib.n2[i] << " ";
+    }
+    cout << " ";
+    for(int i=0; i<4; i++){
+        cout << nib.n3[i] << " ";
+    }
+    cout << "\n"; 
 }

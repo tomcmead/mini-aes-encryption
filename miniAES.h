@@ -7,9 +7,9 @@
   type definitions
 ----------------------------------------------------------------------------*/
 typedef struct{
-    int p0[4];
-    bool p1[4];
-    bool p2[4];
-    bool p3[4];
-} p_nibbles;
+    bool n0[4];
+    bool n1[4];
+    bool n2[4];
+    bool n3[4];
+} nibbles_t;
 
