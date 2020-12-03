@@ -11,12 +11,13 @@
 #include "miniAES.h"
 #include "src/nibbleSub.h"
 #include "src/shiftRow.h"
+#include "src/mixColumn.h"
 
 using namespace std;
 
 int main(){
 
-    uint16_t plaintext=0x9C63;      // 16-bit plaintext block
+    uint16_t plaintext=0xFA50;      // 16-bit plaintext block
     nibbles_block_t p, a, b, c, d;
     
 
@@ -31,10 +32,10 @@ int main(){
         n2Bits[i] = binaryNum[i+8];
         n3Bits[i] = binaryNum[i+12];
     }
-    p.n0 = binary2Dec(n0Bits);
-    p.n1 = binary2Dec(n1Bits);
-    p.n2 = binary2Dec(n2Bits);
-    p.n3 = binary2Dec(n3Bits);
+    p.n0 = binary2Dec(n0Bits, 4);
+    p.n1 = binary2Dec(n1Bits, 4);
+    p.n2 = binary2Dec(n2Bits, 4);
+    p.n3 = binary2Dec(n3Bits, 4);
 
     cout << "Plaintext: ";
     displayNibbleBlock(p);
@@ -57,9 +58,15 @@ int main(){
     cout << "\nShift Row: ";
     displayNibbleBlock(b);
 
+    c = b;
     // MixColumn
     // Takes each column of input block and multiples it with constant matrix
+    mixColumn(c);
 
+    cout << "\nMix Column: ";
+    displayNibbleBlock(c);
+
+    d = c;
 
     
     // KeyAddition
@@ -82,9 +89,9 @@ void dec2Binary(int dec, bool *binaryNum){
     }
 }
 
-int binary2Dec(bool *binary){    
+int binary2Dec(bool *binary, int bits){    
     int decimal = 0;
-    for(int i=0; i<4; i++){
+    for(int i=0; i<bits; i++){
         if(binary[i]==1)
             decimal += pow(2,i);
     }

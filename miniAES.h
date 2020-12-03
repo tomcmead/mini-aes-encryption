@@ -20,7 +20,7 @@ typedef struct{
   prototypes
 ----------------------------------------------------------------------------*/
 
-int binary2Dec(bool *binary);
+int binary2Dec(bool *binary, int bits);
 void displayNibbleBlock(nibbles_block_t nib);
 void dec2Binary(int dec, bool *binaryNum);
 
