@@ -12,6 +12,7 @@
 #include "src/nibbleSub.h"
 #include "src/shiftRow.h"
 #include "src/mixColumn.h"
+#include "src/keys.h"
 
 using namespace std;
 
@@ -21,6 +22,19 @@ int main(){
     //nibbles_block_t p, a, b, c, d;
 
     int encrypt[NIBBLES_BLOCK_SIZE];
+
+    // Key generation
+    int keysR0[NIBBLES_BLOCK_SIZE];
+    int keysR1[NIBBLES_BLOCK_SIZE];
+    int keysR2[NIBBLES_BLOCK_SIZE];
+    keyGeneration(keysR0, keysR1, keysR2);
+
+    cout << "Round 0 Keys: ";
+    displayArray(keysR0);
+    cout << "Round 1 Keys: ";
+    displayArray(keysR1);
+    cout << "Round 2 Keys: ";
+    displayArray(keysR2);
 
     // Transform 16 bit block into 4 nibbles
     bool binaryNum [16];
