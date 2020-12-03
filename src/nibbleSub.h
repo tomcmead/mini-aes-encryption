@@ -4,7 +4,7 @@
 #include "../miniAES.h"
 
 
-void nibbleSub(nibbles_block_t &A);
+int nibbleSub(int num);
 
 int sBox(int in);
 

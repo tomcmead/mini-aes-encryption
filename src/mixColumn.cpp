@@ -5,13 +5,17 @@ a constant matrix to obtain a new output column.
 *****************************************************************************/
 #include "mixColumn.h"
 
-void mixColumn(nibbles_block_t &C){
-    nibbles_block_t D;
-    D.n0 = galoisAdd(galoisMult(3, C.n0), galoisMult(2, C.n1));             (3*C.n0) ^ (2*C.n1);     // (3*C.n0) + (2*C.n1);
-    D.n1 = galoisAdd(galoisMult(2, C.n0), galoisMult(3, C.n1));
-    D.n2 = galoisAdd(galoisMult(3, C.n2), galoisMult(2, C.n3));
-    D.n3 = galoisAdd(galoisMult(2, C.n2), galoisMult(3, C.n3));  
-    C = D;  
+void mixColumn(int *C){
+
+    int c0 = galoisAdd(galoisMult(3, C[0]), galoisMult(2, C[1]));   
+    int c1= galoisAdd(galoisMult(2, C[0]), galoisMult(3, C[1]));
+    int c2 = galoisAdd(galoisMult(3, C[2]), galoisMult(2, C[3]));
+    int c3 = galoisAdd(galoisMult(2, C[2]), galoisMult(3, C[3]));  
+
+    C[0] = c0;
+    C[1] = c1;
+    C[2] = c2;
+    C[3] = c3;  
 }
 
 int galoisAdd(int a, int b){

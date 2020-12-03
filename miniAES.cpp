@@ -18,55 +18,51 @@ using namespace std;
 int main(){
 
     uint16_t plaintext=0xFA50;      // 16-bit plaintext block
-    nibbles_block_t p, a, b, c, d;
-    
+    //nibbles_block_t p, a, b, c, d;
+
+    int encrypt[NIBBLES_BLOCK_SIZE];
 
     // Transform 16 bit block into 4 nibbles
     bool binaryNum [16];
     dec2Binary(plaintext, binaryNum);
     
-    bool n0Bits[4], n1Bits[4], n2Bits[4], n3Bits[4];
+    bool p0Bits[4], p1Bits[4], p2Bits[4], p3Bits[4];
     for(int i=0; i<4; i++){
-        n0Bits[i] = binaryNum[i];
-        n1Bits[i] = binaryNum[i+4];
-        n2Bits[i] = binaryNum[i+8];
-        n3Bits[i] = binaryNum[i+12];
+        p0Bits[i] = binaryNum[i];
+        p1Bits[i] = binaryNum[i+4];
+        p2Bits[i] = binaryNum[i+8];
+        p3Bits[i] = binaryNum[i+12];
     }
-    p.n0 = binary2Dec(n0Bits, 4);
-    p.n1 = binary2Dec(n1Bits, 4);
-    p.n2 = binary2Dec(n2Bits, 4);
-    p.n3 = binary2Dec(n3Bits, 4);
+    encrypt[0] = binary2Dec(p0Bits, 4);
+    encrypt[1] = binary2Dec(p1Bits, 4);
+    encrypt[2] = binary2Dec(p2Bits, 4);
+    encrypt[3] = binary2Dec(p3Bits, 4);
 
     cout << "Plaintext: ";
-    displayNibbleBlock(p);
-
-    a = p;
+    displayArray(encrypt);
 
     // NibbleSub
-    // substitutes each nibble wiwth output nibble from S-Box look-up table
-    nibbleSub(a);
+    // substitutes each nibble with output nibble from S-Box look-up table
+    for(int i=0; i<NIBBLES_BLOCK_SIZE; i++)
+        encrypt[i] = nibbleSub(encrypt[i]);
 
     cout << "\nNibble Substitute: ";
-    displayNibbleBlock(a);
+    displayArray(encrypt);
 
-    b = a;
     // ShiftRow
     // Rotates each row of input block left by different amounts
     // a0 a1 a2 a3  ->  a0 a3 a2 a3
-    shiftRow(b);
+    shiftRow(encrypt);
 
     cout << "\nShift Row: ";
-    displayNibbleBlock(b);
+    displayArray(encrypt);
 
-    c = b;
     // MixColumn
     // Takes each column of input block and multiples it with constant matrix
-    mixColumn(c);
+    mixColumn(encrypt);
 
     cout << "\nMix Column: ";
-    displayNibbleBlock(c);
-
-    d = c;
+    displayArray(encrypt);
 
     
     // KeyAddition
@@ -98,11 +94,9 @@ int binary2Dec(bool *binary, int bits){
     return decimal;
 }
 
-
-void displayNibbleBlock(nibbles_block_t nib){
-    cout << hex << nib.n0 << " ";
-    cout << hex << nib.n1 << " ";
-    cout << hex << nib.n2 << " ";
-    cout << hex << nib.n3 << " ";
-    cout << "\n"; 
+void displayArray(int *arr){
+    for(int i=0; i<NIBBLES_BLOCK_SIZE; i++){
+        cout << arr[i] << " ";
+    }
+    cout << endl;
 }

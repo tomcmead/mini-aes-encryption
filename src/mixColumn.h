@@ -7,7 +7,7 @@
 
 #include "../miniAES.h"
 
-void mixColumn(nibbles_block_t &C);
+void mixColumn(int *C);
 int galoisAdd(int a, int b);
 int galoisMult(int a, int b);
 int galoisMod(int);

@@ -6,6 +6,8 @@
 #ifndef _MINI_AES_H
 #define _MINI_AES_H
 
+#define NIBBLES_BLOCK_SIZE 4
+
 /*----------------------------------------------------------------------------
   type definitions
 ----------------------------------------------------------------------------*/
@@ -21,7 +23,7 @@ typedef struct{
 ----------------------------------------------------------------------------*/
 
 int binary2Dec(bool *binary, int bits);
-void displayNibbleBlock(nibbles_block_t nib);
+void displayArray(int *arr);
 void dec2Binary(int dec, bool *binaryNum);
 
 

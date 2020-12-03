@@ -6,9 +6,9 @@
 *****************************************************************************/
 #include "shiftRow.h"
 
-void shiftRow(nibbles_block_t &B){
+void shiftRow(int *shift){
 
-    int temp = B.n1;
-    B.n1 = B.n3;
-    B.n3 = temp;
+    int temp = shift[1];
+    shift[1] = shift[3];
+    shift[3] = temp;
 }
