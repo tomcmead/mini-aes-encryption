@@ -25,4 +25,5 @@ void keyGeneration(int *keys0, int *keys1, int *keys2){
     keys1[0] = w4;  keys1[1] = w5;  keys1[2] = w6;  keys1[3] = w7; 
     keys2[0] = w8;  keys2[1] = w9;  keys2[2] = w10;  keys2[3] = w11; 
 
+    return;
 }

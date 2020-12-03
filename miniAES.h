@@ -7,6 +7,7 @@
 #define _MINI_AES_H
 
 #define NIBBLES_BLOCK_SIZE 4
+#define NUM_OF_ROUNDS 3
 
 /*----------------------------------------------------------------------------
   type definitions
