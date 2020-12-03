@@ -14,13 +14,43 @@
 #include "src/mixColumn.h"
 #include "src/keys.h"
 
-using namespace std;
 
 int main(){
 
-    uint16_t plaintext=0x9C63;      // 16-bit plaintext block
- 
     int encrypt[NIBBLES_BLOCK_SIZE];
+    uint16_t plaintext=0x9C63;      // 16-bit plaintext block
+
+    encrytionAES(plaintext, encrypt);
+ 
+}
+
+void dec2Binary(int dec, bool *binaryNum){
+    int i = 0;
+    while(dec>0){
+        binaryNum[i] = dec % 2;
+        dec = dec / 2;
+        i++;
+    }
+}
+
+int binary2Dec(bool *binary, int bits){    
+    int decimal = 0;
+    for(int i=0; i<bits; i++){
+        if(binary[i]==1)
+            decimal += pow(2,i);
+    }
+    return decimal;
+}
+
+void displayArray(int *arr){
+    for(int i=0; i<NIBBLES_BLOCK_SIZE; i++){
+        cout << hex << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+void encrytionAES(int plaintext, int *encrypt){
+    
     int P[NIBBLES_BLOCK_SIZE];
 
     // Key generation
@@ -74,7 +104,7 @@ int main(){
         displayArray(encrypt);
 
         if(round == NUM_OF_ROUNDS-1)
-            return 0;
+            return;
 
         cout << "\nROUND " << round+1 << ":" << endl;
 
@@ -112,31 +142,4 @@ int main(){
             displayArray(encrypt); 
         }
     }
-
-    return 0; 
-}
-
-void dec2Binary(int dec, bool *binaryNum){
-    int i = 0;
-    while(dec>0){
-        binaryNum[i] = dec % 2;
-        dec = dec / 2;
-        i++;
-    }
-}
-
-int binary2Dec(bool *binary, int bits){    
-    int decimal = 0;
-    for(int i=0; i<bits; i++){
-        if(binary[i]==1)
-            decimal += pow(2,i);
-    }
-    return decimal;
-}
-
-void displayArray(int *arr){
-    for(int i=0; i<NIBBLES_BLOCK_SIZE; i++){
-        cout << hex << arr[i] << " ";
-    }
-    cout << endl;
 }

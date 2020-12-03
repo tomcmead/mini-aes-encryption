@@ -1,17 +1,32 @@
 /*************************************************************************//**
 * @file nibbleSub.cpp
-* @brief substitutes each input nibble with an output nibble
+* @brief Substitutes each input nibble with an output nibble
 according to a 4 × 4 substitution table (S-box).
 *****************************************************************************/
+/*----------------------------------------------------------------------------
+  include files
+----------------------------------------------------------------------------*/
 #include "nibbleSub.h"
 
-int nibbleSub(int num){
-    return sBox(num);
+/*----------------------------------------------------------------------------
+  public functions
+----------------------------------------------------------------------------*/
+/*************************************************************************//**
+* @brief Nibble substitutes current value with one in S-Box lookup table
+* @param int a number to be substituted
+* @return int
+*****************************************************************************/
+int nibbleSub(int b){
+    return sBox(b);
 }
 
-
-int sBox(int in){
-    switch(in){
+/*************************************************************************//**
+* @brief S-Box lookup table
+* @param int input number to be substituted
+* @return int
+*****************************************************************************/
+int sBox(int input){
+    switch(input){
         case 0:         // b'0000
             return 14;  // b'1110
         case 1:         // b'0001
