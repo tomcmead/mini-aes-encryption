@@ -13,7 +13,8 @@
 /*----------------------------------------------------------------------------
   prototypes
 ----------------------------------------------------------------------------*/
-int nibbleSub(int b);
+int nibbleSub(int b, bool isEncrypting);
 int sBox(int input);
+int sBoxInverse(int input);
 
 #endif

@@ -84,7 +84,7 @@ decrypting respectively. bool isEncrypting is 1 for encryption, 0 for decryption
 *****************************************************************************/
 int miniAES(int text, bool isEncrypting){
     
-    int P[NIBBLES_BLOCK_SIZE];          // Plaintext nibble array, each int element is 4-bit nibble
+    int TP[NIBBLES_BLOCK_SIZE];          // Text nibble array, each int element is 4-bit nibble
     int encrypt[NIBBLES_BLOCK_SIZE];    // Encrypted nibble array, each int element is 4-bit nibble
 
     //-----------------------------KEY GENERATION-----------------------------
@@ -101,51 +101,60 @@ int miniAES(int text, bool isEncrypting){
     cout << "Round 3 Keys: ";
     displayArray(keysR2);
 
-    // Transform 16 bit plaintext block into 4 nibbles
+    // Transform 16 bit text block into 4 4-bit nibbles
     bool binaryNum [16];
-    dec2Binary(text, binaryNum);
+    dec2Binary(text, binaryNum);    // Convert pass int 'text' to bool 16-bit (element) binary array
     
-    bool p0Bits[4], p1Bits[4], p2Bits[4], p3Bits[4];
+    // Store each nibble of 16-bit 'text' bool binary number in a int 4-bit nibble array 
+    bool t0Nibble[4], t1Nibble[4], t2Nibble[4], t3Nibble[4];   
     for(int i=0; i<4; i++){
-        p0Bits[i] = binaryNum[i+12];
-        p1Bits[i] = binaryNum[i+8];
-        p2Bits[i] = binaryNum[i+4];
-        p3Bits[i] = binaryNum[i];
+        t0Nibble[i] = binaryNum[i+12];
+        t1Nibble[i] = binaryNum[i+8];
+        t2Nibble[i] = binaryNum[i+4];
+        t3Nibble[i] = binaryNum[i];
     }
 
-    P[0] = binary2Dec(p0Bits, 4);
-    P[1] = binary2Dec(p1Bits, 4);
-    P[2] = binary2Dec(p2Bits, 4);
-    P[3] = binary2Dec(p3Bits, 4);
+    // Convert each nibble back to decimal and store in array T (text nibble array)
+    T[0] = binary2Dec(t0Nibble, 4);
+    T[1] = binary2Dec(t1Nibble, 4);
+    T[2] = binary2Dec(t2Nibble, 4);
+    T[3] = binary2Dec(t3Nibble, 4);
 
-    cout << "\nPlaintext: ";
-    displayArray(P);
+    // Display plaintext/ciphertext if encrypting/decrypting respectively
+    if(isEncrypting)
+        cout << "\nPlaintext: ";
+    else
+        cout << "\nCiphertext: ";    
+    displayArray(T);
     cout << endl;
 
+    // Loop through all round of AES algorithm 0-2
     for(int round=0; round < NUM_OF_ROUNDS-1; round++){
 
         //------------------------ROUND KEY ENCRYPTION-----------------------
+        // First round GF addition of each nibble of text and corresponding
+        // round key, text nibble0 + k0, text nibble1 + k1...
         if(round == 0)
             for(int i=0; i<NIBBLES_BLOCK_SIZE; i++)
-                encrypt[i] = galoisAdd(P[i], keysR0[i]);
+                encrypt[i] = galoisAdd(T[i], keysR0[i]); // galiosAdd declared in mixColumn.h
 
         if(round == 1)
             for(int i=0; i<NIBBLES_BLOCK_SIZE; i++)
                 encrypt[i] = galoisAdd(encrypt[i], keysR1[i]);
 
-
-        cout << "Round Key" << round << " Encrypted: ";
+        // Display round key encryption/decryption result
+        if(isEncrypting)
+            cout << "Round Key" << round << " Encrypted: ";
+        else
+            cout << "Round Key" << round << " Decrypted: ";        
         displayArray(encrypt);
-
-        //if(round == NUM_OF_ROUNDS-1)
-        //    return; // Re
 
         cout << "\nROUND " << round+1 << ":" << endl;
 
 
         //---------------------------NIBBLE SUBSTITUTION--------------------------
-        for(int i=0; i<NIBBLES_BLOCK_SIZE; i++) // Nibble substitue all 4 nibbles
-            encrypt[i] = nibbleSub(encrypt[i]); // individually
+        for(int i=0; i<NIBBLES_BLOCK_SIZE; i++) // Nibble substitue all 4 nibbles individually
+            encrypt[i] = nibbleSub(encrypt[i], isEncrypting); 
 
         cout << "Nibble Substitute: ";
         displayArray(encrypt);
