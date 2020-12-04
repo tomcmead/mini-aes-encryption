@@ -6,7 +6,7 @@ the basic principles behind how Mini-AES works, it will be easy for them to move
 real AES.
 
 ## Setup
-To run this project, install it locally using npm
+To run this project, install it locally, make and run
 ```
 git clone https://github.com/tomcmead/mini-aes-encryption.git
 cd mini-aes-encryption
