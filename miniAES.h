@@ -23,7 +23,7 @@ using namespace std;
 
 int binary2Dec(bool *binary, int bits);
 void displayArray(int *arr);
-void dec2Binary(int dec, bool *binaryNum);
-void encrytionAES(int plaintext, int *encrypted);
+void dec2Binary(int dec, bool *binary);
+int miniAES(int plaintext, bool isEncrypting);
 
 #endif

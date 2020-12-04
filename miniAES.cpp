@@ -17,22 +17,43 @@
 
 int main(){
 
-    int encrypt[NIBBLES_BLOCK_SIZE];
+    bool isEncrypting;              // 1 for encryption, 0 for decryption
     uint16_t plaintext=0x9C63;      // 16-bit plaintext block
 
-    encrytionAES(plaintext, encrypt);
+    //----------------------------ENCRYPTION----------------------------
+    // AES Encryption of plaintext and print ciphertext result
+    isEncrypting = 1;
+    int cipher = miniAES(plaintext, isEncrypting);      
+    cout << "Ciphertext: 0x" << hex << cipher << endl;
+
+    //----------------------------DECRYPTION----------------------------
+    // AES Decryption of ciphertext and print plaintext result
+    isEncrypting = 0;
+    int plain = miniAES(cipher, isEncrypting);      
+    cout << "Plaintext: 0x" << hex << plain << endl;
  
 }
 
-void dec2Binary(int dec, bool *binaryNum){
+/*************************************************************************//**
+* @brief Decimal to binary array conversion
+* @param int dec decimal, bool *binaryNum pointer to start of binary array
+* @return None
+*****************************************************************************/
+void dec2Binary(int dec, bool *binary){
     int i = 0;
     while(dec>0){
-        binaryNum[i] = dec % 2;
+        binary[i] = dec % 2;
         dec = dec / 2;
         i++;
     }
 }
 
+/*************************************************************************//**
+* @brief Binary array to decimal conversion
+* @param bool *binary pointer to start of binary array, int bits number bits in
+binary array
+* @return int decimal result
+*****************************************************************************/
 int binary2Dec(bool *binary, int bits){    
     int decimal = 0;
     for(int i=0; i<bits; i++){
@@ -42,21 +63,35 @@ int binary2Dec(bool *binary, int bits){
     return decimal;
 }
 
+/*************************************************************************//**
+* @brief Print binary array data
+* @param int *arr pointer to start of binary array
+* @return None
+*****************************************************************************/
 void displayArray(int *arr){
+    cout << "0x";
     for(int i=0; i<NIBBLES_BLOCK_SIZE; i++){
-        cout << hex << arr[i] << " ";
+        cout << hex << arr[i];
     }
     cout << endl;
 }
 
-void encrytionAES(int plaintext, int *encrypt){
+/*************************************************************************//**
+* @brief AES Encryption/Decryption
+* @param int text input either plaintext or cipher text, for encrypting or
+decrypting respectively. bool isEncrypting is 1 for encryption, 0 for decryption
+* @return int ciphertext result if encrypting or plaintex if decrypting
+*****************************************************************************/
+int miniAES(int text, bool isEncrypting){
     
-    int P[NIBBLES_BLOCK_SIZE];
+    int P[NIBBLES_BLOCK_SIZE];          // Plaintext nibble array, each int element is 4-bit nibble
+    int encrypt[NIBBLES_BLOCK_SIZE];    // Encrypted nibble array, each int element is 4-bit nibble
 
-    // Key generation
-    int keysR0[NIBBLES_BLOCK_SIZE];
+    //-----------------------------KEY GENERATION-----------------------------
+    int keysR0[NIBBLES_BLOCK_SIZE];     // Each int element is 4-bit nibble key k0, k1, k2, k3
     int keysR1[NIBBLES_BLOCK_SIZE];
     int keysR2[NIBBLES_BLOCK_SIZE];
+
     keyGeneration(keysR0, keysR1, keysR2);
 
     cout << "Round 1 Keys: ";
@@ -68,7 +103,7 @@ void encrytionAES(int plaintext, int *encrypt){
 
     // Transform 16 bit plaintext block into 4 nibbles
     bool binaryNum [16];
-    dec2Binary(plaintext, binaryNum);
+    dec2Binary(text, binaryNum);
     
     bool p0Bits[4], p1Bits[4], p2Bits[4], p3Bits[4];
     for(int i=0; i<4; i++){
@@ -89,57 +124,58 @@ void encrytionAES(int plaintext, int *encrypt){
 
     for(int round=0; round < NUM_OF_ROUNDS-1; round++){
 
-        switch(round){
-            case 0:
-                for(int i=0; i<NIBBLES_BLOCK_SIZE; i++)
-                    encrypt[i] = galoisAdd(P[i], keysR0[i]);
-                break;
-            case 1:
-                for(int i=0; i<NIBBLES_BLOCK_SIZE; i++)
-                    encrypt[i] = galoisAdd(encrypt[i], keysR1[i]);
-                break;
-        }
+        //------------------------ROUND KEY ENCRYPTION-----------------------
+        if(round == 0)
+            for(int i=0; i<NIBBLES_BLOCK_SIZE; i++)
+                encrypt[i] = galoisAdd(P[i], keysR0[i]);
+
+        if(round == 1)
+            for(int i=0; i<NIBBLES_BLOCK_SIZE; i++)
+                encrypt[i] = galoisAdd(encrypt[i], keysR1[i]);
+
 
         cout << "Round Key" << round << " Encrypted: ";
         displayArray(encrypt);
 
-        if(round == NUM_OF_ROUNDS-1)
-            return;
+        //if(round == NUM_OF_ROUNDS-1)
+        //    return; // Re
 
         cout << "\nROUND " << round+1 << ":" << endl;
 
-        // NibbleSub
-        // substitutes each nibble with output nibble from S-Box look-up table
-        for(int i=0; i<NIBBLES_BLOCK_SIZE; i++)
-            encrypt[i] = nibbleSub(encrypt[i]);
+
+        //---------------------------NIBBLE SUBSTITUTION--------------------------
+        for(int i=0; i<NIBBLES_BLOCK_SIZE; i++) // Nibble substitue all 4 nibbles
+            encrypt[i] = nibbleSub(encrypt[i]); // individually
 
         cout << "Nibble Substitute: ";
         displayArray(encrypt);
 
-        // ShiftRow
-        // Rotates each row of input block left by different amounts
-        // a0 a1 a2 a3  ->  a0 a3 a2 a3
-        shiftRow(encrypt);
+
+        //-------------------------------SHIFT ROW--------------------------------
+        shiftRow(encrypt);      
 
         cout << "Shift Row: ";
         displayArray(encrypt);
 
-        // MixColumn
-        // Takes each column of input block and multiples it with constant matrix
-        if(round != NUM_OF_ROUNDS-2){
+        
+        if(round != NUM_OF_ROUNDS-2){  // Do not perform mix column on final round
+            //-----------------------------MIX COLUMN-----------------------------
             mixColumn(encrypt);
 
             cout << "Mix Column: ";
             displayArray(encrypt); 
         }
-        else{
+        else{   // Final round - galois addition of encryted text & final round key 
             for(int i=0; i<NIBBLES_BLOCK_SIZE; i++)
                 encrypt[i] = galoisAdd(encrypt[i], keysR2[i]);
+                
 
             cout << "Round Key" << NUM_OF_ROUNDS-1 << " Encrypted: ";
             displayArray(encrypt);
-            cout << "\nAES Encrypted: ";
+            cout << "\nCiphertext: ";
             displayArray(encrypt); 
         }
     }
+    // Return ciphertext as an integer
+    return (encrypt[0]<<12) + (encrypt[1]<<8) + (encrypt[2]<<4) + encrypt[3];
 }
