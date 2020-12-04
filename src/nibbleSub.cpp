@@ -1,17 +1,35 @@
 /*************************************************************************//**
 * @file nibbleSub.cpp
-* @brief substitutes each input nibble with an output nibble
+* @brief Substitutes each input nibble with an output nibble
 according to a 4 × 4 substitution table (S-box).
 *****************************************************************************/
+/*----------------------------------------------------------------------------
+  include files
+----------------------------------------------------------------------------*/
 #include "nibbleSub.h"
 
-int nibbleSub(int num){
-    return sBox(num);
+/*----------------------------------------------------------------------------
+  public functions
+----------------------------------------------------------------------------*/
+/*************************************************************************//**
+* @brief Nibble substitutes current value with one in S-Box lookup table
+* @param int a number to be substituted
+* @return int
+*****************************************************************************/
+int nibbleSub(int b, bool isEncrypting){
+    if(isEncrypting)
+        return sBox(b);
+    else
+        return sBoxInverse(b);
 }
 
-
-int sBox(int in){
-    switch(in){
+/*************************************************************************//**
+* @brief S-Box lookup table
+* @param int input number to be substituted
+* @return int
+*****************************************************************************/
+int sBox(int input){
+    switch(input){
         case 0:         // b'0000
             return 14;  // b'1110
         case 1:         // b'0001
@@ -44,7 +62,50 @@ int sBox(int in){
             return 0;   // b'0000
         case 15:        // b'1111
             return 7;   // b'0111
+    }
+    return -1;
+}
 
+
+/*************************************************************************//**
+* @brief S-Box inverse lookup table
+* @param int input number to be substituted
+* @return int
+*****************************************************************************/
+int sBoxInverse(int input){
+    switch(input){
+        case 0:         // b'0000
+            return 14;  // b'1110
+        case 1:         // b'0001
+            return 3;   // b'0011
+        case 2:         // b'0010
+            return 4;   // b'0100
+        case 3:         // b'0011
+            return 8;   // b'1000
+        case 4:         // b'0100
+            return 1;   // b'0001  
+        case 5:         // b'0101
+            return 12;  // b'1100
+        case 6:         // b'0110
+            return 10;  // b'1010
+        case 7:         // b'0111
+            return 15;  // b'1111
+        case 8:         // b'1000
+            return 7;   // b'0111
+        case 9:         // b'1001
+            return 13;  // b'1101
+        case 10:        // b'1010
+            return 9;   // b'1001
+        case 11:        // b'1011
+            return 6;   // b'0110
+        case 12:        // b'1100
+            return 11;  // b'1011
+        case 13:        // b'1101
+            return 2;   // b'0010
+        case 14:        // b'1110
+            return 0;   // b'0000
+        case 15:        // b'1111
+            return 5;   // b'0101
     }
     return -1;
 }

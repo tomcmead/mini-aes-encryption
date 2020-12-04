@@ -1,6 +1,22 @@
+/*************************************************************************//**
+* @file keys.cpp
+* @brief  Generates keys for AES encryption/decryption
+*****************************************************************************/
+/*----------------------------------------------------------------------------
+  include files
+----------------------------------------------------------------------------*/
 #include "keys.h"
 
-void keyGeneration(int *keys0, int *keys1, int *keys2){
+/*----------------------------------------------------------------------------
+  public functions
+----------------------------------------------------------------------------*/
+/*************************************************************************//**
+* @brief Generates 3 rounds of keys
+* @param int *keys0, int *keys1, int *keys2 pointer to start of nibble array 
+for each binary keys
+* @return None
+*****************************************************************************/
+void keyGeneration(int *keys0, int *keys1, int *keys2, bool isEncrypting){
   
     int w0, w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11;
 
@@ -9,13 +25,13 @@ void keyGeneration(int *keys0, int *keys1, int *keys2){
     w2 = KEY2;
     w3 = KEY3;
 
-    w4 = galoisAdd(w0, nibbleSub(w3));
+    w4 = galoisAdd(w0, nibbleSub(w3, 1));
     w4 = galoisAdd(w4, RCON1);
     w5 = galoisAdd(w1, w4);
     w6 = galoisAdd(w2, w5);
     w7 = galoisAdd(w3, w6);
 
-    w8 = galoisAdd(w4, nibbleSub(w7));
+    w8 = galoisAdd(w4, nibbleSub(w7, 1));
     w8 = galoisAdd(w8, RCON2);
     w9 = galoisAdd(w5, w8);
     w10 = galoisAdd(w6, w9);

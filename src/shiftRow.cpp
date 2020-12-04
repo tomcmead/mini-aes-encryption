@@ -1,14 +1,25 @@
 /*************************************************************************//**
 * @file shiftRow.cpp
-* @brief rotates each row of the input block to the left by different nibble
+* @brief Rotates each row of the input block to the left by different nibble
  amounts. The first row is unchanged while the second row is rotated left by 
  one nibble.
 *****************************************************************************/
+
+/*----------------------------------------------------------------------------
+  include files
+----------------------------------------------------------------------------*/
 #include "shiftRow.h"
 
-void shiftRow(int *shift){
-
-    int temp = shift[1];
-    shift[1] = shift[3];
-    shift[3] = temp;
+/*----------------------------------------------------------------------------
+  public functions
+----------------------------------------------------------------------------*/
+/*************************************************************************//**
+* @brief Shifts each row of input nibble block array, swaps elements 1 and 3
+* @param int *b pointer to start of nibble array to be shifted
+* @return None
+*****************************************************************************/
+void shiftRow(int *b){
+    int temp = b[1];
+    b[1] = b[3];
+    b[3] = temp;
 }
