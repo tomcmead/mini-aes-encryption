@@ -96,7 +96,7 @@ int miniAES(int text, bool isEncrypting){
 
 
     if(isEncrypting)
-        cout << "-----ENCRYPTION-----" << endl;
+        cout << "\n-----ENCRYPTION-----" << endl;
     else
         cout << "-----DECRYPTION-----" << endl;
     //-----------------------------KEY GENERATION-----------------------------
