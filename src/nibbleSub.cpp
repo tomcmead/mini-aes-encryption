@@ -21,7 +21,6 @@ int nibbleSub(int b, bool isEncrypting){
         return sBox(b);
     else
         return sBoxInverse(b);
-    
 }
 
 /*************************************************************************//**

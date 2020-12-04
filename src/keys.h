@@ -25,6 +25,6 @@
 /*----------------------------------------------------------------------------
   prototypes
 ----------------------------------------------------------------------------*/
-void keyGeneration(int *keys0, int *keys1, int *keys2);
+void keyGeneration(int *keys0, int *keys1, int *keys2, bool isEncrypting);
 
 #endif
