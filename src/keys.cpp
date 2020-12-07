@@ -6,6 +6,9 @@
   include files
 ----------------------------------------------------------------------------*/
 #include "keys.h"
+#include "../miniAES.h"
+#include "mixColumn.h"
+#include "nibbleSub.h"
 
 /*----------------------------------------------------------------------------
   public functions
@@ -16,17 +19,18 @@
 for each binary keys
 * @return None
 *****************************************************************************/
-void keyGeneration(int *keys0, int *keys1, int *keys2, bool isEncrypting){
+void keyGeneration(int *keys0, int *keys1, int *keys2){
   
     int w0, w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11;
 
-    w0 = KEY0;
+    // Manifest constants KEY0-KEY3 and RCON1-RCON2 are defined in keys.h
+    w0 = KEY0;  
     w1 = KEY1;
     w2 = KEY2;
     w3 = KEY3;
 
-    w4 = galoisAdd(w0, nibbleSub(w3, 1));
-    w4 = galoisAdd(w4, RCON1);
+    w4 = galoisAdd(w0, nibbleSub(w3, 1)); // gnibbleSub define nibbleSub.h (1 means non-inverted subsitution)
+    w4 = galoisAdd(w4, RCON1);            // galoisAdd defined in mixColumn.h
     w5 = galoisAdd(w1, w4);
     w6 = galoisAdd(w2, w5);
     w7 = galoisAdd(w3, w6);

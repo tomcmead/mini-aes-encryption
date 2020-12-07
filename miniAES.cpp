@@ -20,9 +20,9 @@ int main(){
     bool isEncrypting;              // 1 for encryption, 0 for decryption
     uint16_t plaintext=0x9C63;      // 16-bit plaintext block
 
-    // User input for plaintext value to undergo Mini AES Encryption and Decryption
+  // User input for plaintext value to undergo Mini AES Encryption and Decryption
     cout << "Enter 16-bit integer as hexdecimal number for Mini AES Encryption/Decryption" << endl;
-    cout << "Example: 0x9C63" << endl;
+    //cout << "Example: 0x9C63" << endl;
     cout << "Plaintext: ";
     cin >> hex >> plaintext;
     //----------------------------ENCRYPTION----------------------------
@@ -36,7 +36,7 @@ int main(){
     isEncrypting = 0;
     int plain = miniAES(cipher, isEncrypting);      
     cout << "\nPLAINTEXT: 0x" << hex << plain << endl;
- 
+
 }
 
 /*************************************************************************//**
@@ -104,13 +104,13 @@ int miniAES(int text, bool isEncrypting){
     int keysR1[NIBBLES_BLOCK_SIZE];
     int keysR2[NIBBLES_BLOCK_SIZE];
 
-    keyGeneration(keysR0, keysR1, keysR2, isEncrypting);
+    keyGeneration(keysR0, keysR1, keysR2);
 
-    cout << "Round 1 Keys: ";
+    cout << "Round 0 Keys: ";
     displayArray(keysR0);
-    cout << "Round 2 Keys: ";
+    cout << "Round 1 Keys: ";
     displayArray(keysR1);
-    cout << "Round 3 Keys: ";
+    cout << "Round 2 Keys: ";
     displayArray(keysR2);
 
     // Transform 16 bit text block into 4 4-bit nibbles
@@ -141,7 +141,7 @@ int miniAES(int text, bool isEncrypting){
     cout << endl;
 
     // Loop through all round of AES algorithm 0-2
-    for(int round=0; round < NUM_OF_ROUNDS-1; round++){
+    for(int round=0; round < NUM_OF_ROUNDS; round++){
 
         //------------------------ROUND KEY ENCRYPTION-----------------------
         // First round GF addition of each nibble of text and corresponding
@@ -163,7 +163,7 @@ int miniAES(int text, bool isEncrypting){
         if(isEncrypting)
             cout << "Round Key" << round << " Encrypted: ";
         else
-            cout << "Round Key" << NUM_OF_ROUNDS-1-round << " Decrypted: ";      
+            cout << "Round Key" << NUM_OF_ROUNDS-round << " Decrypted: ";      
         displayArray(encrypt);
 
         
@@ -200,7 +200,7 @@ int miniAES(int text, bool isEncrypting){
 
         //-------------------------------MIX COLUMN-------------------------------
         // Do not perform mix column on final round for encryption
-        if(round != NUM_OF_ROUNDS-2 && isEncrypting){  
+        if(round != NUM_OF_ROUNDS-1 && isEncrypting){  
 
             mixColumn(encrypt);     // Declared in mixColumn.h
 

@@ -10,7 +10,7 @@
   manifest constants
 ----------------------------------------------------------------------------*/
 #define NIBBLES_BLOCK_SIZE 4
-#define NUM_OF_ROUNDS 3
+#define NUM_OF_ROUNDS 2
 
 /*----------------------------------------------------------------------------
   namespace

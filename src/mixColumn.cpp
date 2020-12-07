@@ -6,6 +6,7 @@ a constant matrix to obtain a new output column
 /*----------------------------------------------------------------------------
   include files
 ----------------------------------------------------------------------------*/
+#include "../miniAES.h"
 #include "mixColumn.h"
 
 /*----------------------------------------------------------------------------
@@ -20,7 +21,7 @@ matrix [[3 2] [2 3]]
 void mixColumn(int *c){
 
     int c0 = galoisAdd(galoisMult(3, c[0]), galoisMult(2, c[1]));   
-    int c1= galoisAdd(galoisMult(2, c[0]), galoisMult(3, c[1]));
+    int c1 = galoisAdd(galoisMult(2, c[0]), galoisMult(3, c[1]));
     int c2 = galoisAdd(galoisMult(3, c[2]), galoisMult(2, c[3]));
     int c3 = galoisAdd(galoisMult(2, c[2]), galoisMult(3, c[3]));  
 
